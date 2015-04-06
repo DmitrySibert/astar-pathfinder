@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Graph
+namespace AStarImplementation.Data.Structure
 {
     class Location2D : IEquatable<Location2D>
     {
