@@ -47,4 +47,26 @@ namespace AStarImplementation
             return came_from;
         }
     }
+
+    public class ChebishevDist2D : IHeuristicStrategy<Location2D>
+    {
+        public double calculate(Location2D l1, Location2D l2)
+        {
+            double dx = Math.Abs(l1.x - l2.x);
+            double dy = Math.Abs(l1.y - l2.y);
+
+            return Math.Max(dx, dy);
+        }
+    }
+
+    public class ManhattanDist2D : IHeuristicStrategy<Location2D>
+    {
+        public double calculate(Location2D l1, Location2D l2)
+        {
+            double dx = Math.Abs(l1.x - l2.x);
+            double dy = Math.Abs(l1.y - l2.y);
+
+            return dx + dy;
+        }
+    } 
 }
