@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AStarImplementation
+namespace AStarImplementation.Data.Structure
 {
     
     class PriorityQueue<Element>

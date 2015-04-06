@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Graph;
+using AStarImplementation.Data.Structure;
 
 namespace AStarImplementation
 {
@@ -25,6 +25,10 @@ namespace AStarImplementation
             queue.Add(1.5, C);
 
             Location2D location = queue.Top();
+            location = queue.Top();
+            location = queue.Top();
+            location = queue.Top();
+            location = queue.Top();
 
             int k = 10;
         }
