@@ -9,30 +9,9 @@ namespace AStarImplementation
     
     class PriorityQueue<Element>
     {
-        //private SortedSet<KeyValuePair<double, Element>> queue;
-        private SortedDictionary<double, Element> queue;
+        private SortedList<double, Element> queue;
 
-        //private class KeyOrder : Comparer<KeyValuePair<double, Element>>
-        //{
-        //    public override int Compare(KeyValuePair<double, Element> x, KeyValuePair<double, Element> y)
-        //    {
-        //        if (x.Key > y.Key)
-        //        {
-        //            return 1;
-        //        }
-        //        else if (x.Key < y.Key)
-        //        {
-        //            return -1;
-        //        }
-        //        else
-        //        {
-        //            return 1;
-        //        }
-
-        //    }
-        //}
-
-        private class KeyOrder : Comparer<double>
+        private class DuplicateKeyOrder : Comparer<double>
         {
             public override int Compare(double x, double y)
             {
@@ -54,14 +33,11 @@ namespace AStarImplementation
 
         public PriorityQueue()
         {
-            //this.queue = new SortedSet<KeyValuePair<double, Element>>(new KeyOrder());
-            this.queue = new SortedDictionary<double, Element>(new KeyOrder());
+            this.queue = new SortedList<double, Element>(new DuplicateKeyOrder());
         }
 
         public void Add(double priority, Element element)
         {
-
-            //this.queue.Add(new KeyValuePair<double, Element>(priority, element));
             this.queue.Add(priority, element);
         }
 
@@ -71,13 +47,10 @@ namespace AStarImplementation
         /// <returns></returns>
         public Element Top()
         {
-            //KeyValuePair<double, Element> top = this.queue.Min;
-            //this.queue.Remove(top);
+            Element top = this.queue.Values[0];
+            this.queue.RemoveAt(0);
 
-            Element top = this.queue.Keys[0];
-            this.queue.Remove(top);
-
-            return top.Value;
+            return top;
         }
 
         public bool IsEmpty()
