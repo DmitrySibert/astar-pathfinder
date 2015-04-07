@@ -8,9 +8,100 @@ using AStarImplementation.Data.Structure;
 namespace AStarImplementation
 {
    
+   
     class Program
     {
+        static byte[,] matrix = new byte[5, 5]
+        {
+            {1,0,1,1,1},
+            {1,0,1,1,1},
+            {1,0,1,0,1},
+            {1,1,1,0,1},
+            {1,1,1,0,1}
+        };
         static void Main(string[] args)
+        {
+            Graph<Location2D> grid = new Graph<Location2D>();
+
+            for(int i = 0; i < matrix.Length; i++)
+            {
+                for (int j = 0; j < matrix.GetLength(i); j++)
+                {
+                    if (matrix[i, j] == 1)
+                    {
+                        grid.AddNode(new Location2D(i, j));
+                    }
+                }
+            }
+
+
+            for (int i = 1; i < matrix.Length - 1; i++)
+            {
+                for (int j = 1; j < matrix.GetLength(i) - 1; j++)
+                {
+                    Location2D current = new Location2D(i,j);
+                    for (int k = i - 1; k <= i + 1; k++)
+                    {
+                        for (int l = j - 1; l <= j + 1; l++)
+                        {
+                            if (matrix[k,l] == 1)
+                            {
+                                Location2D neighbour = new Location2D(k,l);
+                                grid.AddEdge(current, neighbour);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //grid.AddNode(new Location2D(1, 1));
+            //grid.AddNode(new Location2D(1, 2));
+            //grid.AddNode(new Location2D(1, 3));
+            //grid.AddNode(new Location2D(1, 4));
+            //grid.AddNode(new Location2D(1, 5));
+            //grid.AddNode(new Location2D(2, 4));
+            //grid.AddNode(new Location2D(2, 5));
+            //grid.AddNode(new Location2D(3, 1));
+            //grid.AddNode(new Location2D(3, 2));
+            //grid.AddNode(new Location2D(3, 3));
+            //grid.AddNode(new Location2D(3, 4));
+            //grid.AddNode(new Location2D(3, 5));
+            //grid.AddNode(new Location2D(4, 1));
+            //grid.AddNode(new Location2D(4, 2));
+            //grid.AddNode(new Location2D(5, 1));
+            //grid.AddNode(new Location2D(5, 2));
+            //grid.AddNode(new Location2D(5, 3));
+            //grid.AddNode(new Location2D(5, 4));
+            //grid.AddNode(new Location2D(5, 5));
+            //grid.AddEdge(new Location2D(1, 1), new Location2D(1, 2));
+            //grid.AddEdge(new Location2D(1, 2), new Location2D(1, 3));
+
+            //grid.AddEdge(new Location2D(1, 3), new Location2D(1, 4));
+            //grid.AddEdge(new Location2D(1, 3), new Location2D(2, 4));
+
+            //grid.AddEdge(new Location2D(1, 4), new Location2D(1, 5));
+            //grid.AddEdge(new Location2D(1, 4), new Location2D(2, 4));
+            //grid.AddEdge(new Location2D(1, 4), new Location2D(2, 5));
+
+            //grid.AddEdge(new Location2D(1, 5), new Location2D(1, 4));
+            //grid.AddEdge(new Location2D(1, 5), new Location2D(2, 4));
+            //grid.AddEdge(new Location2D(1, 5), new Location2D(2, 5));
+
+            //grid.AddEdge(new Location2D(2, 4), new Location2D(1, 3));
+            //grid.AddEdge(new Location2D(2, 4), new Location2D(1, 4));
+            //grid.AddEdge(new Location2D(2, 4), new Location2D(1, 5));
+            //grid.AddEdge(new Location2D(2, 4), new Location2D(2, 5));
+            //grid.AddEdge(new Location2D(2, 4), new Location2D(3, 3));
+            //grid.AddEdge(new Location2D(2, 4), new Location2D(3, 4));
+            //grid.AddEdge(new Location2D(2, 4), new Location2D(3, 5));
+
+            //grid.AddEdge(new Location2D(2, 5), new Location2D(2, 4));
+            //grid.AddEdge(new Location2D(2, 5), new Location2D(1, 4));
+            //grid.AddEdge(new Location2D(2, 5), new Location2D(3, 4));
+
+        }
+
+        static void priorityQueueTest()
         {
             PriorityQueue<Location2D> queue = new PriorityQueue<Location2D>();
 
