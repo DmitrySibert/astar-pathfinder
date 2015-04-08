@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AStarImplementation.Data.Structure
 {
-    class Location2D : IEquatable<Location2D>
+    public class Location2D : IEquatable<Location2D>
     {
         public readonly double x,y;
 
@@ -52,19 +52,19 @@ namespace AStarImplementation.Data.Structure
         }
 
     }
-    class Graph<Node>
+    public class Graph<Node>
         where Node : IEquatable<Node>
     {
-        private Dictionary<Node, List<Node>> edges;
+        private Dictionary<Node, HashSet<Node>> edges;
 
         public Graph()
         {
-            this.edges = new Dictionary<Node, List<Node>>();  
+            this.edges = new Dictionary<Node, HashSet<Node>>();  
         }
 
         public void AddNode(Node node)
         {
-            List<Node> edges = new List<Node>();
+            HashSet<Node> edges = new HashSet<Node>();
             this.edges.Add(node, edges);
         }
 
@@ -76,7 +76,7 @@ namespace AStarImplementation.Data.Structure
 
         public List<Node> GetNeighbors(Node node)
         {
-            return this.edges[node];
+            return this.edges[node].ToList<Node>();
         }
     }
 }
