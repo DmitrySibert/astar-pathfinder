@@ -12,9 +12,9 @@ namespace AStarImplementation
         double calculate(Location l1, Location l2);
     }
 
-    class AStar
+    public class AStar
     {
-        public static Dictionary<Location2D, Location2D> Run(
+        public static List<Location2D> Run(
             Graph<Location2D> graph, Location2D start, Location2D goal, IHeuristicStrategy<Location2D> heuristic)
         {
             PriorityQueue<Location2D> open = new PriorityQueue<Location2D>();
@@ -44,7 +44,31 @@ namespace AStarImplementation
 	            }
             }
 
-            return came_from;
+            return buildPath(came_from, start, goal);
+        }
+
+        private static List<Location2D> buildPath(Dictionary<Location2D, Location2D> came_from, Location2D start, Location2D goal)
+        {
+            List<Location2D> path = new List<Location2D>();
+            if (!came_from.ContainsKey(goal))
+            {
+                return path;
+            }
+            Location2D cur = came_from[goal];
+            path.Add(cur);
+            Location2D from;
+            while(true)
+            {
+                from = came_from[cur];
+                path.Add(from);
+                if(from.Equals(start))
+                {
+                    break;
+                }
+                cur = from;
+            }
+
+            return path;
         }
     }
 

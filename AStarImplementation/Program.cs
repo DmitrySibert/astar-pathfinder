@@ -38,7 +38,7 @@ namespace AStarImplementation
             {
                 for (int j = l_j - limit_j.start; j <= l_j + limit_j.end; j++)
                 {
-                    if (i != l_i && j != l_j)
+                    if (!(i == l_i && j == l_j))
                     {
                         if (matrix[i,j] == 1)
                         {
@@ -53,9 +53,9 @@ namespace AStarImplementation
         {
             Graph<Location2D> grid = new Graph<Location2D>();
 
-            for(int i = 0; i < matrix.Length; i++)
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                for (int j = 0; j < matrix.GetLength(i); j++)
+                for (int j = 0; j < matrix.GetLength(1); j++)
                 {
                     if (matrix[i, j] == 1)
                     {
@@ -65,117 +65,102 @@ namespace AStarImplementation
             }
             //top raw without corners
             int topRowNum = 0;
-            for (int j = 1; j < matrix.GetLength(topRowNum) - 1; j++)
+            for (int j = 1; j < matrix.GetLength(1) - 1; j++)
             {
                 Limit2D limit_i = new Limit2D(0,1);
                 Limit2D limit_j = new Limit2D(1,1);
-                setNeighboursAround(topRowNum, j, grid, limit_i, limit_j);
+                if (matrix[topRowNum, j] == 1)
+                {
+                    setNeighboursAround(topRowNum, j, grid, limit_i, limit_j);
+                }
             }
             
             //bottom line without corners
-            int botRawNum = matrix.Length - 1;
-            for (int j = 1; j < matrix.GetLength(botRawNum) - 1; j++)
+            int botRawNum = matrix.GetLength(0) - 1;
+            for (int j = 1; j < matrix.GetLength(1) - 1; j++)
             {
                 Limit2D limit_i = new Limit2D(1, 0);
                 Limit2D limit_j = new Limit2D(1, 1);
-                setNeighboursAround(botRawNum, j, grid, limit_i, limit_j);
+                if (matrix[botRawNum, j] == 1)
+                {
+                    setNeighboursAround(botRawNum, j, grid, limit_i, limit_j);
+                }
             }
 
             //left column without corners
             int leftColNum = 0;
-            for (int i = 1; i < matrix.Length - 1; i++)
+            for (int i = 1; i < matrix.GetLength(0) - 1; i++)
             {
                 Limit2D limit_i = new Limit2D(1, 1);
                 Limit2D limit_j = new Limit2D(0, 1);
-                setNeighboursAround(i, leftColNum, grid, limit_i, limit_j);
+                if (matrix[i, leftColNum] == 1)
+                {
+                    setNeighboursAround(i, leftColNum, grid, limit_i, limit_j);
+                }
             }
 
             //right column without corners
-            int rightColNum = matrix.GetLength(0) - 1;
-            for (int i = 1; i < matrix.Length - 1; i++)
+            int rightColNum = matrix.GetLength(1) - 1;
+            for (int i = 1; i < matrix.GetLength(0) - 1; i++)
             {
                 Limit2D limit_i = new Limit2D(1, 1);
                 Limit2D limit_j = new Limit2D(1, 0);
-                setNeighboursAround(i, rightColNum, grid, limit_i, limit_j);
+                if (matrix[i, rightColNum] == 1)
+                {
+                    setNeighboursAround(i, rightColNum, grid, limit_i, limit_j);
+                }
             }
 
             Limit2D limitI = new Limit2D(0, 1);
             Limit2D limitJ = new Limit2D(0, 1);
             setNeighboursAround(0, 0, grid, limitI, limitJ);
-            limitI = new Limit2D(1, 0);
-            limitJ = new Limit2D(0, 1);
-            setNeighboursAround(0, matrix.GetLength(0) - 1, grid, limitI, limitJ);
             limitI = new Limit2D(0, 1);
             limitJ = new Limit2D(1, 0);
-            setNeighboursAround(matrix.Length - 1, 0, grid, limitI, limitJ);
+            setNeighboursAround(0, matrix.GetLength(0) - 1, grid, limitI, limitJ);
+            limitI = new Limit2D(1, 0);
+            limitJ = new Limit2D(0, 1);
+            setNeighboursAround(matrix.GetLength(0) - 1, 0, grid, limitI, limitJ);
             limitI = new Limit2D(1, 0);
             limitJ = new Limit2D(1, 0);
-            setNeighboursAround(matrix.Length - 1, matrix.GetLength(0) - 1, grid, limitI, limitJ);
+            setNeighboursAround(matrix.GetLength(0) - 1, matrix.GetLength(1) - 1, grid, limitI, limitJ);
 
-            for (int i = 1; i < matrix.Length - 1; i++)
+            for (int i = 1; i < matrix.GetLength(0) - 1; i++)
             {
-                for (int j = 1; j < matrix.GetLength(i) - 1; j++)
+                for (int j = 1; j < matrix.GetLength(1) - 1; j++)
                 {
-                    Location2D current = new Location2D(i,j);
-                    for (int k = i - 1; k <= i + 1; k++)
+                    if (matrix[i, j] == 1)
                     {
-                        for (int l = j - 1; l <= j + 1; l++)
-                        {
-                            if (matrix[k,l] == 1)
-                            {
-                                Location2D neighbour = new Location2D(k,l);
-                                grid.AddEdge(current, neighbour);
-                            }
-                        }
+                        limitI = new Limit2D(1, 1);
+                        limitJ = new Limit2D(1, 1);
+                        setNeighboursAround(i, j, grid, limitI, limitJ);
                     }
                 }
             }
 
-            //grid.AddNode(new Location2D(1, 1));
-            //grid.AddNode(new Location2D(1, 2));
-            //grid.AddNode(new Location2D(1, 3));
-            //grid.AddNode(new Location2D(1, 4));
-            //grid.AddNode(new Location2D(1, 5));
-            //grid.AddNode(new Location2D(2, 4));
-            //grid.AddNode(new Location2D(2, 5));
-            //grid.AddNode(new Location2D(3, 1));
-            //grid.AddNode(new Location2D(3, 2));
-            //grid.AddNode(new Location2D(3, 3));
-            //grid.AddNode(new Location2D(3, 4));
-            //grid.AddNode(new Location2D(3, 5));
-            //grid.AddNode(new Location2D(4, 1));
-            //grid.AddNode(new Location2D(4, 2));
-            //grid.AddNode(new Location2D(5, 1));
-            //grid.AddNode(new Location2D(5, 2));
-            //grid.AddNode(new Location2D(5, 3));
-            //grid.AddNode(new Location2D(5, 4));
-            //grid.AddNode(new Location2D(5, 5));
-            //grid.AddEdge(new Location2D(1, 1), new Location2D(1, 2));
-            //grid.AddEdge(new Location2D(1, 2), new Location2D(1, 3));
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    if(matrix[i,j] == 1)
+                    {
+                        List<Location2D> list = grid.GetNeighbors(new Location2D(i, j));
+                        Console.Write("x={0};y={1} ::", i, j);
+                        foreach(Location2D item in list)
+                        {
+                            Console.Write("({0};{1}) ", item.x, item.y);
+                            
+                        }
+                        Console.WriteLine();
+                    }
+                }
+            }
 
-            //grid.AddEdge(new Location2D(1, 3), new Location2D(1, 4));
-            //grid.AddEdge(new Location2D(1, 3), new Location2D(2, 4));
+           
+            Location2D start = new Location2D(0,0);
+            Location2D goal = new Location2D(4,4);
+            List<Location2D> path = AStar.Run(grid, start, goal, new ChebishevDist2D());
 
-            //grid.AddEdge(new Location2D(1, 4), new Location2D(1, 5));
-            //grid.AddEdge(new Location2D(1, 4), new Location2D(2, 4));
-            //grid.AddEdge(new Location2D(1, 4), new Location2D(2, 5));
-
-            //grid.AddEdge(new Location2D(1, 5), new Location2D(1, 4));
-            //grid.AddEdge(new Location2D(1, 5), new Location2D(2, 4));
-            //grid.AddEdge(new Location2D(1, 5), new Location2D(2, 5));
-
-            //grid.AddEdge(new Location2D(2, 4), new Location2D(1, 3));
-            //grid.AddEdge(new Location2D(2, 4), new Location2D(1, 4));
-            //grid.AddEdge(new Location2D(2, 4), new Location2D(1, 5));
-            //grid.AddEdge(new Location2D(2, 4), new Location2D(2, 5));
-            //grid.AddEdge(new Location2D(2, 4), new Location2D(3, 3));
-            //grid.AddEdge(new Location2D(2, 4), new Location2D(3, 4));
-            //grid.AddEdge(new Location2D(2, 4), new Location2D(3, 5));
-
-            //grid.AddEdge(new Location2D(2, 5), new Location2D(2, 4));
-            //grid.AddEdge(new Location2D(2, 5), new Location2D(1, 4));
-            //grid.AddEdge(new Location2D(2, 5), new Location2D(3, 4));
-
+            int kk = 1;
         }
 
         static void priorityQueueTest()
