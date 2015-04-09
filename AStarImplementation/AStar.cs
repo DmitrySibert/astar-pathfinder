@@ -9,59 +9,78 @@ namespace AStarImplementation
 {
     public interface IHeuristicStrategy<Location>
     {
-        double calculate(Location l1, Location l2);
+        double Calculate(Location l1, Location l2);
     }
 
-    public class AStar
+    public interface IPathBuilder<Location>
     {
-        public static List<Location2D> Run(
-            Graph<Location2D> graph, Location2D start, Location2D goal, IHeuristicStrategy<Location2D> heuristic)
+        List<Location> Build(Dictionary<Location, Location> came_from, Location start, Location goal);
+    }
+
+    public class AStar<Location>
+        where Location : IEquatable<Location>
+    {
+        private IHeuristicStrategy<Location> heuristic;
+        private IPathBuilder<Location> pathBuilder;
+
+        public AStar(IHeuristicStrategy<Location> heuristic, IPathBuilder<Location> pathBuilder)
         {
-            PriorityQueue<Location2D> open = new PriorityQueue<Location2D>();
+            this.heuristic = heuristic;
+            this.pathBuilder = pathBuilder;
+        }
+
+        public List<Location> Run(IWeightedGraph<Location> graph, Location start, Location goal)
+        {
+            PriorityQueue<Location> open = new PriorityQueue<Location>();
             open.Add(0, start);
-            Dictionary<Location2D, double> g_cost = new Dictionary<Location2D,double>();                   //cost from start vertex to current
+            Dictionary<Location, double> g_cost = new Dictionary<Location, double>();                   //cost from start vertex to current
             g_cost[start] = 0;
-            Dictionary<Location2D, Location2D> came_from = new Dictionary<Location2D, Location2D>();
+            Dictionary<Location, Location> came_from = new Dictionary<Location, Location>();
             while(!open.IsEmpty())
             {
-                Location2D current = open.Top();
+                Location current = open.Top();
                 if (current.Equals(goal))
                 {
                     break;
                 }
-                List<Location2D> neighbours = graph.GetNeighbors(current);
-                foreach (Location2D item in neighbours)
+                IEnumerable<Location> neighbours = graph.GetNeighbors(current);
+                foreach (Location item in neighbours)
 	            {
                     //magic number is cost of transition from current to its neighbor
-                    double cost = g_cost[current] + 1; 		 
+                    double cost = g_cost[current] + graph.Cost(current, item); 		 
                     if (!g_cost.ContainsKey(item) || cost < g_cost[item])
                     {
                         g_cost[item] = cost;   
-                        double priority = heuristic.calculate(item, goal);
+                        double priority = this.heuristic.Calculate(item, goal);
                         open.Add(priority, item);
                         came_from[item] = current;
                     }
 	            }
             }
 
-            return buildPath(came_from, start, goal);
+            return this.pathBuilder.Build(came_from, start, goal);
         }
+    }
 
-        private static List<Location2D> buildPath(Dictionary<Location2D, Location2D> came_from, Location2D start, Location2D goal)
+    public class SimplePathBuilder<Location> : IPathBuilder<Location>
+        where Location : IEquatable<Location>
+    {
+        public List<Location> Build(Dictionary<Location, Location> came_from, Location start, Location goal)
         {
-            List<Location2D> path = new List<Location2D>();
+            List<Location> path = new List<Location>();
             if (!came_from.ContainsKey(goal))
             {
                 return path;
             }
-            Location2D cur = came_from[goal];
+            path.Add(goal);
+            Location cur = came_from[goal];
             path.Add(cur);
-            Location2D from;
-            while(true)
+            Location from;
+            while (true)
             {
                 from = came_from[cur];
                 path.Add(from);
-                if(from.Equals(start))
+                if (from.Equals(start))
                 {
                     break;
                 }
@@ -74,7 +93,7 @@ namespace AStarImplementation
 
     public class ChebishevDist2D : IHeuristicStrategy<Location2D>
     {
-        public double calculate(Location2D l1, Location2D l2)
+        public double Calculate(Location2D l1, Location2D l2)
         {
             double dx = Math.Abs(l1.x - l2.x);
             double dy = Math.Abs(l1.y - l2.y);
@@ -85,7 +104,7 @@ namespace AStarImplementation
 
     public class ManhattanDist2D : IHeuristicStrategy<Location2D>
     {
-        public double calculate(Location2D l1, Location2D l2)
+        public double Calculate(Location2D l1, Location2D l2)
         {
             double dx = Math.Abs(l1.x - l2.x);
             double dy = Math.Abs(l1.y - l2.y);

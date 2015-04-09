@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace AStarImplementation.Data.Structure
 {
-    
     class PriorityQueue<Element>
     {
         private SortedList<double, Element> queue;
@@ -27,7 +26,6 @@ namespace AStarImplementation.Data.Structure
                 {
                     return 1;
                 }
-
             }
         }
 

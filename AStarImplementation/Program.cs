@@ -143,7 +143,7 @@ namespace AStarImplementation
                 {
                     if(matrix[i,j] == 1)
                     {
-                        List<Location2D> list = grid.GetNeighbors(new Location2D(i, j));
+                        IEnumerable<Location2D> list = grid.GetNeighbors(new Location2D(i, j));
                         Console.Write("x={0};y={1} ::", i, j);
                         foreach(Location2D item in list)
                         {
@@ -158,7 +158,8 @@ namespace AStarImplementation
            
             Location2D start = new Location2D(0,0);
             Location2D goal = new Location2D(4,4);
-            List<Location2D> path = AStar.Run(grid, start, goal, new ChebishevDist2D());
+            AStar<Location2D> astar = new AStar<Location2D>(new ChebishevDist2D(), new SimplePathBuilder<Location2D>());
+            List<Location2D> path = astar.Run(grid, start, goal);
 
             int kk = 1;
         }
@@ -203,8 +204,8 @@ namespace AStarImplementation
             graph.AddEdge(A, D);
             graph.AddEdge(D, C);
 
-            List<Location2D> neighborsA = graph.GetNeighbors(A);
-            List<Location2D> neighborsC = graph.GetNeighbors(C);
+            IEnumerable<Location2D> neighborsA = graph.GetNeighbors(A);
+            IEnumerable<Location2D> neighborsC = graph.GetNeighbors(C);
 
             int k = 10;
         }

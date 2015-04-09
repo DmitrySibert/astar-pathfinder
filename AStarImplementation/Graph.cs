@@ -50,9 +50,15 @@ namespace AStarImplementation.Data.Structure
 
             return hash;
         }
-
     }
-    public class Graph<Node>
+
+    public interface IWeightedGraph<Node>
+    {
+        double Cost(Node node1, Node node2);
+        IEnumerable<Node> GetNeighbors(Node node);
+    }
+
+    public class Graph<Node> : IWeightedGraph<Node>
         where Node : IEquatable<Node>
     {
         private Dictionary<Node, HashSet<Node>> edges;
@@ -74,7 +80,12 @@ namespace AStarImplementation.Data.Structure
             this.edges[node2].Add(node1);
         }
 
-        public List<Node> GetNeighbors(Node node)
+        public double Cost(Node node1, Node node2)
+        {
+            return 1;
+        }
+
+        public IEnumerable<Node> GetNeighbors(Node node)
         {
             return this.edges[node].ToList<Node>();
         }
