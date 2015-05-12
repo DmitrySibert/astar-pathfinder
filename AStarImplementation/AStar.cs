@@ -51,7 +51,7 @@ namespace AStarImplementation
                     if (!g_cost.ContainsKey(item) || cost < g_cost[item])
                     {
                         g_cost[item] = cost;   
-                        double priority = this.heuristic.Calculate(item, goal);
+                        double priority = cost + this.heuristic.Calculate(item, goal);
                         open.Add(priority, item);
                         came_from[item] = current;
                     }
@@ -73,8 +73,7 @@ namespace AStarImplementation
                 return path;
             }
             path.Add(goal);
-            Location cur = came_from[goal];
-            path.Add(cur);
+            Location cur = goal;
             Location from;
             while (true)
             {
